@@ -4,8 +4,15 @@ Self-contained two-stage training for an SO-101 arm, using the original pick-pla
 
 ## Four-step quickstart
 
-1. Clone this repository and enter its directory.
+1. Clone this repository and enter its directory, replacing `<new-repo-url>` with its Git URL:
+
+   ```bash
+   git clone <new-repo-url> so101-groot-train
+   cd so101-groot-train
+   ```
+
 2. Build and start the container:
+
    ```bash
    docker build -t so101-groot-train .
    ./run_container.sh
@@ -14,6 +21,8 @@ Self-contained two-stage training for an SO-101 arm, using the original pick-pla
 4. Run `./train.sh`.
 
 The checkout is mounted at `/workspace/so101-groot-train`. Outputs default to the host `/external_storage/models/so101_official_n17`; `run_container.sh --output_root /path` changes the host mount, placing the default run under `/path/so101_official_n17`. Host caches use `${HF_HOME:-$HOME/.cache/huggingface}` and `${UV_CACHE_DIR:-$HOME/.cache/uv}`. Matching, complete pinned HF snapshots are checksum-verified and reused without re-downloading. Set `HF_TOKEN` in the host environment if the gated Cosmos backbone needs authentication; tokens are never written to the repository.
+
+Setup verifies imports, exact versions, GPU visibility, every committed dataset file hash, both dataset readers and both official snapshots. It then performs two Stage 1 forward/backward optimizer updates from the official foundation. These checks exercise the parameter audits and memory ladder. Setup removes its own temporary verification checkpoints after success and retains their logs, run configuration and metrics under the output mount. Full training checkpoints remain retained.
 
 ## Initialization and training
 
@@ -42,9 +51,11 @@ Resume must use checkpoints from the matching stage and preserve the audited mod
 
 Python 3.12.13, Torch 2.9.0+cu128 and Transformers 4.57.3 match the saved run's version evidence. The root Dockerfile supplies CUDA 12.8 system dependencies for RTX 4090 and H200; setup installs the pinned Python environment.
 
-An RTX 4090 uses a measured memory ladder: smaller microbatches, gradient accumulation, block checkpointing, then 8-bit AdamW. The full DiT remains trainable in Stage 2. If the complete ladder cannot fit Stage 2, the launcher preserves Stage 1 and exits with an explicit capacity report. Two H200s use distributed training with an effective batch of at least 64. GPU preflight does not kill processes or start teleoperation.
+An RTX 4090 uses a memory ladder: smaller microbatches, gradient accumulation, block checkpointing, then 8-bit AdamW. The full DiT remains trainable in Stage 2. If the complete ladder cannot fit Stage 2, the launcher preserves Stage 1 and exits with an explicit capacity report. Two H200s use distributed training with an effective batch of at least 64. GPU preflight does not kill processes or start teleoperation.
 
-Fresh-clone image/setup/dry-run and 50-step-per-stage verification is in progress. Durations and peak memory will be recorded from that test; no unmeasured 4090 or H200 duration is claimed here.
+The fresh-clone image build, dependency/import checks, GPU visibility, all 375 dataset file hashes, both dataset readers and both pinned HF snapshot cache checks passed. Setup stopped before loading the model; zero model forward/backward passes or optimizer updates ran. Further GPU testing was stopped at the user's request, so `train.sh --dry_run` and both 50-step smoke tests were skipped. Peak training memory, seconds per step and full-plan ETAs remain unmeasured on both the RTX 4090 and two H200s. The [verification report](docs/verification.md) records the checks and their limits.
+
+See [Training on the H200](PROMPT_H200.md). The supplied prompt is preserved verbatim; its external-venv and local-model setup flags still need implementation, as recorded in the [H200 compatibility note](docs/verification.md#h200-hand-off-compatibility).
 
 ## Dataset provenance and approval
 
@@ -54,9 +65,22 @@ The approved dataset is committed under `datasets/pick_place_groot/`: **70 main 
 
 The preserved 200k checkpoint is evaluation-only and lives outside this repository. Evaluation runs in the Sim-to-Real repository; training does not.
 
+## Code history and the optional dataset removal
+
+Code, setup, documentation, audits and tests are committed before the dataset. The final commit adds only `datasets/pick_place_groot/` as ordinary Git files. The default main checkout includes that commit and supports the four-step training workflow.
+
+When `HEAD` is that dataset-only final commit, dropping it gives a code checkout without the prepared dataset. Save your local work first: the following command discards uncommitted changes and moves the branch back by one commit.
+
+```bash
+git reset --hard HEAD~1
+```
+
+This removes the committed prepared dataset from the checkout. Restore the dataset commit or rebuild the approved dataset using the recorded build command before running setup or training again. The original raw recordings and external model/cache directories are outside this checkout and are unaffected.
+
 ## Tests and attribution
 
 ```bash
+uv sync --frozen --extra dev --inexact --python 3.12.13
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 .venv/bin/python -m pytest -p pytest_timeout tests/so101/ -m "not gpu" --timeout=300
 ```
 

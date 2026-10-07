@@ -8,7 +8,16 @@ Official base: `nvidia/GR00T-N1.7-3B`, named by the pinned README, revision `2fc
 
 Backbone: `nvidia/Cosmos-Reason2-2B`, revision `9ce19a195e423419c349abfc86fd07178b230561`.
 
-The base's pretrained tags are `OXE_DROID_RELATIVE_EEF_RELATIVE_JOINT`, `XDOF`, `XDOF_SUBTASK`, `REAL_G1`, `REAL_R1_PRO_SHARPA`, `REAL_R1_PRO_SHARPA_HUMAN`, `REAL_R1_PRO_SHARPA_MAXINSIGHTS`, and `REAL_R1_PRO_SHARPA_MECKA`. None is SO-100/SO-101-compatible. This project uses `NEW_EMBODIMENT` with fresh SO-101 adapters.
+The pinned foundation's `processor_config.json` declares eight modality configurations. Its `embodiment_id.json` maps those configurations to four shared state/action adapter banks:
+
+| Adapter bank index | Processor configuration tags |
+| --- | --- |
+| 24 | `oxe_droid_relative_eef_relative_joint` |
+| 25 | `real_g1_relative_eef_relative_joints` |
+| 26 | `real_r1_pro_sharpa_relative_eef`, `real_r1_pro_sharpa_relative_eef_human`, `real_r1_pro_sharpa_relative_eef_maxinsights`, `real_r1_pro_sharpa_relative_eef_mecka` |
+| 27 | `xdof_relative_eef_relative_joint`, `xdof_relative_eef_relative_joint_subtask` |
+
+The full `embodiment_id.json` contains 52 tag names, including aliases for shared banks; this mapping is broader than the processor's eight configured modalities. Neither file declares an SO-100, SO-101 or SO_ARM head. The approved training plan uses `NEW_EMBODIMENT` with fresh SO-101 adapters at bank index 10.
 
 The old 200k checkpoint is evaluation-only. Only its data/modality/processor settings and library-version evidence may inform this project; its weights never initialize training.
 
