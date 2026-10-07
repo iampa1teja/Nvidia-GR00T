@@ -251,13 +251,33 @@ def detect_gpus(
     return _select_visible(gpus, visible)
 
 
+def has_workload_processes(gpu: GPUInfo) -> bool:
+    """Reject compute/mixed/unknown owners, allowing only small graphics contexts.
+
+    Container PID namespaces may hide an Xorg owner's name, while NVML still
+    reports its G type and memory. Total GPU memory and activity are checked
+    separately by preflight, so G alone is not enough to permit training.
+    """
+    return bool(gpu.processes) and not (
+        all(
+            process.kind == "G" and process.used_memory_mib is not None for process in gpu.processes
+        )
+        and sum(process.used_memory_mib for process in gpu.processes) <= 128
+    )
+
+
 def preflight_gpus(
     gpus: Sequence[GPUInfo] | None = None,
     *,
     max_used_memory_mib: int = 512,
     max_utilization_percent: int = 10,
 ) -> tuple[GPUInfo, ...]:
-    """Reject busy selected GPUs; this function never kills or signals owners."""
+    """Reject busy GPUs, permitting tiny idle display contexts without signals.
+
+    Graphics-only owners need known memory totaling at most 128 MiB, aggregate
+    GPU use at most 128 MiB and utilization at most 1%. Compute, mixed and
+    unknown owners always fail, even when their reported memory is zero.
+    """
     if max_used_memory_mib < 0 or not 0 <= max_utilization_percent <= 100:
         raise ValueError("Invalid GPU preflight thresholds")
     inventory = detect_gpus() if gpus is None else tuple(gpus)
@@ -265,10 +285,14 @@ def preflight_gpus(
         raise HardwareError("No visible NVIDIA GPUs; check --gpus all and CUDA_VISIBLE_DEVICES")
     reasons = []
     for gpu in inventory:
+        memory_limit = min(max_used_memory_mib, 128) if gpu.processes else max_used_memory_mib
+        utilization_limit = (
+            min(max_utilization_percent, 1) if gpu.processes else max_utilization_percent
+        )
         if (
-            gpu.processes
-            or gpu.used_memory_mib > max_used_memory_mib
-            or gpu.utilization_percent > max_utilization_percent
+            has_workload_processes(gpu)
+            or gpu.used_memory_mib > memory_limit
+            or gpu.utilization_percent > utilization_limit
         ):
             owners = ", ".join(
                 f"PID {process.pid} ({process.kind}: {process.name})" for process in gpu.processes

@@ -132,6 +132,33 @@ def test_compute_process_memory_parsing(monkeypatch):
     assert detect_gpus(environ={})[0].processes[0].used_memory_mib == 1024
 
 
+@pytest.mark.parametrize("name", ["/usr/lib/xorg/Xorg", "unknown"])
+def test_tiny_idle_graphics_context_passes_without_touching_owner(name):
+    display = gpu(used_memory_mib=30, processes=(GPUProcess(2977, name, "G", 18),))
+    assert preflight_gpus([display]) == (display,)
+
+
+@pytest.mark.parametrize(
+    "processes,used,utilization",
+    [
+        ((GPUProcess(1, "python", "C", 0),), 0, 0),
+        ((GPUProcess(1, "python", "C+G", 0),), 0, 0),
+        ((GPUProcess(1, "unknown", "unknown", 0),), 0, 0),
+        ((GPUProcess(1, "Xorg", "G", None),), 30, 0),
+        ((GPUProcess(1, "renderer", "G", 129),), 30, 0),
+        ((GPUProcess(1, "Xorg", "G", 18),), 129, 0),
+        ((GPUProcess(1, "Xorg", "G", 18),), 30, 2),
+        ((GPUProcess(1, "G1", "G", 65), GPUProcess(2, "G2", "G", 64)), 30, 0),
+        ((GPUProcess(1, "Xorg", "G", 18), GPUProcess(2, "python", "C", 0)), 30, 0),
+    ],
+)
+def test_graphics_allowance_never_accepts_workloads_or_activity(processes, used, utilization):
+    with pytest.raises(GPUBusyError):
+        preflight_gpus(
+            [gpu(used_memory_mib=used, utilization_percent=utilization, processes=processes)]
+        )
+
+
 def test_smi_missing_or_timeout_is_useful_error(monkeypatch):
     for error in (FileNotFoundError("nvidia-smi"), subprocess.TimeoutExpired("nvidia-smi", 10)):
         monkeypatch.setattr(subprocess, "run", Mock(side_effect=error))

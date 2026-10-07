@@ -28,6 +28,7 @@ from so101.hardware import (
     GPUBusyError,
     MemoryConfig,
     detect_gpus,
+    has_workload_processes,
     is_cuda_oom,
     memory_ladder,
     preflight_gpus,
@@ -951,9 +952,15 @@ def _preflight_after_worker(expected_gpus):
         try:
             return preflight_gpus(detected)
         except GPUBusyError:
-            # An actual owner remains a hard preflight failure. Only ownerless
-            # telemetry can be a stale NVML sample after our worker has exited.
-            if any(gpu.processes for gpu in detected) or time.monotonic() >= deadline:
+            # Workload owners fail immediately. A departed worker's telemetry
+            # may settle with only the machine's tiny idle display context left.
+            if (
+                any(
+                    has_workload_processes(gpu) or (gpu.processes and gpu.used_memory_mib > 128)
+                    for gpu in detected
+                )
+                or time.monotonic() >= deadline
+            ):
                 raise
             time.sleep(0.25)
 
@@ -1221,6 +1228,13 @@ def main(argv=None):
             "STOP: official base has an SO-100/SO-101-style pretrained head; ask the user before choosing an embodiment"
         )
     gpus = preflight_gpus()
+    for gpu in gpus:
+        if gpu.processes:
+            print(
+                f"GPU {gpu.index}: permitting idle graphics only "
+                f"({gpu.used_memory_mib} MiB aggregate, {gpu.utilization_percent}% utilization)",
+                flush=True,
+            )
     mode = "dry_run" if args.dry_run else "smoke" if args.smoke_steps is not None else "full"
     output_root = args.output_root.expanduser().resolve()
     if mode != "full":
