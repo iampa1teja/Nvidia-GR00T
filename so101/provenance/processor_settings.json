@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "source": "saved_200k/processor/processor_config.json:processor_kwargs",
+  "settings": {
+    "image_crop_size": [
+      230,
+      230
+    ],
+    "image_target_size": [
+      256,
+      256
+    ],
+    "use_albumentations": true,
+    "random_rotation_angle": 0,
+    "color_jitter_params": {
+      "brightness": 0.3,
+      "contrast": 0.4,
+      "saturation": 0.5,
+      "hue": 0.02
+    },
+    "shortest_image_edge": 256,
+    "crop_fraction": 0.95,
+    "letter_box_transform": false,
+    "formalize_language": true,
+    "use_percentiles": true,
+    "use_mean_std": false,
+    "clip_outliers": true,
+    "apply_sincos_state_encoding": false,
+    "use_relative_action": true,
+    "exclude_state": false,
+    "state_dropout_prob": 0.2
+  },
+  "notes": [
+    "use_relative_action is a global processor flag; both SO-101 per-modality action_configs are ABSOLUTE, so no relative joint targets are created.",
+    "Existing image jitter/crop and state dropout are retained; no simulation domain randomization is added.",
+    "max_state_dim, max_action_dim and padded horizon are read from the official foundation config; they are not reconstructed from the old run."
+  ]
+}

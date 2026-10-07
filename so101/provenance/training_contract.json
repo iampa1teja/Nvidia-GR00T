@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "upstream": {
+    "origin": "https://github.com/NVIDIA/Isaac-GR00T.git",
+    "commit": "51d4c89f72fda44cbf77285c6a8114b52676b8a1"
+  },
+  "models": {
+    "foundation": {
+      "repo_id": "nvidia/GR00T-N1.7-3B",
+      "revision": "2fc962b973bccdd5d8ce4f67cc63b264d6886495",
+      "role": "only permitted Stage 1 initialization"
+    },
+    "backbone": {
+      "repo_id": "nvidia/Cosmos-Reason2-2B",
+      "revision": "9ce19a195e423419c349abfc86fd07178b230561",
+      "gated": true
+    }
+  },
+  "setup_downloads": [
+    {
+      "repo_id": "nvidia/GR00T-N1.7-3B",
+      "revision": "2fc962b973bccdd5d8ce4f67cc63b264d6886495"
+    },
+    {
+      "repo_id": "nvidia/Cosmos-Reason2-2B",
+      "revision": "9ce19a195e423419c349abfc86fd07178b230561"
+    }
+  ],
+  "cache": {
+    "reuse_complete_snapshot_at_exact_revision": true,
+    "force_download": false,
+    "container_hf_cache": "/root/.cache/huggingface",
+    "container_uv_cache": "/root/.cache/uv"
+  },
+  "embodiment": {
+    "name": "NEW_EMBODIMENT",
+    "value": "new_embodiment",
+    "fresh_state_action_adapters": true,
+    "projector_index": 10,
+    "source_of_projector_index": "pinned upstream EMBODIMENT_TAG_TO_PROJECTOR_INDEX",
+    "pretrained_tags": [
+      "real_g1_relative_eef_relative_joints",
+      "real_r1_pro_sharpa_relative_eef_mecka",
+      "real_r1_pro_sharpa_relative_eef_human",
+      "real_r1_pro_sharpa_relative_eef",
+      "xdof_relative_eef_relative_joint",
+      "real_r1_pro_sharpa_relative_eef_maxinsights",
+      "xdof_relative_eef_relative_joint_subtask",
+      "oxe_droid_relative_eef_relative_joint"
+    ],
+    "so100_so101_pretrained_head_found": false,
+    "decision": "NEW_EMBODIMENT with fresh SO-101 adapters"
+  },
+  "architecture": {
+    "source": "foundation snapshot config.json only",
+    "never_copy_architecture_from_saved_200k_config": true,
+    "observed_foundation_capacity": {
+      "action_horizon": 40,
+      "max_state_dim": 132,
+      "max_action_dim": 132,
+      "max_num_embodiments": 32,
+      "dit_blocks": 32
+    }
+  },
+  "dataset": {
+    "root": "datasets/pick_place_groot",
+    "embodiment_tag": "new_embodiment",
+    "action_horizon": 16,
+    "fps": 30,
+    "arm_joint_count": 5,
+    "gripper_count": 1,
+    "mixture": [
+      {
+        "subdirectory": "main",
+        "mix_ratio": 1.0
+      },
+      {
+        "subdirectory": "grasp_window",
+        "mix_ratio": 2.0
+      }
+    ],
+    "separate_dataset_specs_required": true,
+    "domain_randomization": false,
+    "new_demonstrations": false
+  },
+  "stages": {
+    "1": {
+      "name": "align",
+      "init": {
+        "repo_id": "nvidia/GR00T-N1.7-3B",
+        "revision": "2fc962b973bccdd5d8ce4f67cc63b264d6886495"
+      },
+      "max_steps": 25000,
+      "learning_rate": 0.0001,
+      "warmup_steps": 1000,
+      "lr_scheduler_type": "cosine",
+      "save_steps": 5000,
+      "save_total_limit": null,
+      "trainable": [
+        "state_encoder",
+        "action_encoder",
+        "action_decoder",
+        "projector",
+        "vision_language_adapter"
+      ],
+      "frozen": [
+        "dit",
+        "llm",
+        "vision"
+      ],
+      "extend_automatically": false
+    },
+    "2": {
+      "name": "main",
+      "init": "Stage 1 final checkpoint",
+      "max_steps": 60000,
+      "learning_rates": {
+        "dit": 3e-05,
+        "adapters": 0.0001
+      },
+      "fallback_learning_rate": 5e-05,
+      "warmup_steps": 1000,
+      "lr_scheduler_type": "cosine",
+      "save_steps": 5000,
+      "save_total_limit": null,
+      "trainable": [
+        "dit",
+        "state_encoder",
+        "action_encoder",
+        "action_decoder",
+        "projector",
+        "vision_language_adapter"
+      ],
+      "frozen": [
+        "llm",
+        "vision"
+      ],
+      "ema": "if supported"
+    }
+  },
+  "evaluation": {
+    "action_horizon": 8,
+    "gripper_latch": true,
+    "log_gripper": true,
+    "stage_2_checkpoint_interval": 10000,
+    "baseline": "so101_pick_place_sim_n17_200k/milestones/checkpoint-200000",
+    "baseline_evaluation_only": true
+  },
+  "initialization_prohibitions": [
+    "saved 200k weights",
+    "nvidia/SO_ARM_Starter_Gr00tN17",
+    "any other fine-tuned checkpoint"
+  ]
+}

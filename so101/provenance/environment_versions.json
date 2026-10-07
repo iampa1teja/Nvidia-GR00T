@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "versions": {
+    "python": "3.12.13",
+    "torch": "2.9.0+cu128",
+    "transformers": "4.57.3",
+    "torchcodec": "0.8.0",
+    "bitsandbytes": "0.50.2",
+    "numpy": "1.26.4",
+    "av": "16.0.1",
+    "cuda": "12.8",
+    "flash_attn": "2.8.3"
+  },
+  "required_exact_versions": [
+    "python",
+    "torch",
+    "transformers"
+  ],
+  "evidence": {
+    "python": {
+      "source": "saved_200k/train.log",
+      "observation": "Stack traces reference uv cpython-3.12.13 and python3.12; preserved .venv interpreter reports 3.12.13"
+    },
+    "torch": {
+      "source": "workshop/docs/05-training.md",
+      "observation": "Torch 2.9.0+cu128, corroborated by preserved runtime distribution metadata"
+    },
+    "transformers": {
+      "source": "saved_200k/milestones/checkpoint-200000/config.json:transformers_version",
+      "observation": "4.57.3, corroborated by workshop setup assert and preserved runtime metadata"
+    },
+    "other_packages": {
+      "source": "preserved GR00T runtime distribution metadata",
+      "observation": "Additional compatibility pins; exact historical 200k versions are not claimed unless independently corroborated"
+    }
+  },
+  "install_bitsandbytes_without_dependencies": true,
+  "never_replace_torch_during_bitsandbytes_install": true
+}

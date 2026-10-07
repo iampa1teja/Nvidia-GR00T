@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "source_files": [
+    {
+      "source": "saved_200k",
+      "path": "experiment_cfg/config.yaml",
+      "sha256": "d69161cb1f70fd054bc04a9c37b83db793f902554678bf46ac7c39ef8168dcbe"
+    },
+    {
+      "source": "saved_200k",
+      "path": "processor/processor_config.json",
+      "sha256": "038c2967caf71b2129b91edeac3f1df9910332177268ee05f5f96d39dcf9586a"
+    },
+    {
+      "source": "saved_200k",
+      "path": "experiment_cfg/final_processor_config.json",
+      "sha256": "f9b78383bee4aa55411a2d2e267933709aede854c8d6de5feed0770d6b0fc022"
+    },
+    {
+      "source": "saved_200k",
+      "path": "milestones/checkpoint-200000/config.json",
+      "sha256": "7362d968047bc87dbda179ada164afebb644c93cef7b99ad067eb0c0d008f4e1"
+    },
+    {
+      "source": "saved_200k",
+      "path": "train.log",
+      "sha256": "b76bffac0c7e6a6438402393114b3e955d3caa58a851bd89313cc54139803f98"
+    },
+    {
+      "source": "workshop",
+      "path": "docs/05-training.md",
+      "sha256": "578b8c9dff0035ebef10c195082c808d964c282b073ae6f09afaceac63808b42"
+    },
+    {
+      "source": "workshop",
+      "path": "scripts/setup_gr00t_n17.sh",
+      "sha256": "c3d186eac81c613c0b9fee7de3acb9ebed91eee73f5f4e8b812a7db13e7d6504"
+    },
+    {
+      "source": "workshop",
+      "path": "scripts/train_dit_only.py",
+      "sha256": "bd18d8a5a9fd7ac15137b4f6ddf435af1a0772f27f15956f2b25c364019a4578"
+    },
+    {
+      "source": "workshop",
+      "path": "scripts/launch_pick_place_n17.py",
+      "sha256": "166f74e5a9b67a152377e7f81a8ba1a8e6aef06319dd9086106cf295c0d648ba"
+    },
+    {
+      "source": "workshop",
+      "path": "scripts/prepare_pick_place_gr00t.py",
+      "sha256": "30e5fa636e3d015c3cb5ac67c81fe90a302e8bc16c651835a1b732b5dd5e35f3"
+    },
+    {
+      "source": "workshop",
+      "path": "scripts/so_arm_n17_config.py",
+      "sha256": "9702ebd814b17c21f786ac59dfdeb13b44a2970d6f595e0e93076520960101c3"
+    },
+    {
+      "source": "workshop",
+      "path": "source/sim_to_real_so101/utils/pick_place_eval.py",
+      "sha256": "0bee65e1b79af4086f6d397e200f11dd27aca77963be9773f149883e273e0b51"
+    },
+    {
+      "source": "workshop",
+      "path": "datasets/pick_place_v1/meta/info.json",
+      "sha256": "8737030d7774d99a647a8f3b98bc26bc3167dc6207a5f5fd5aa0165690b7a1c9"
+    }
+  ],
+  "official_foundation_files": [
+    {
+      "repo_id": "nvidia/GR00T-N1.7-3B",
+      "revision": "2fc962b973bccdd5d8ce4f67cc63b264d6886495",
+      "path": "config.json",
+      "sha256": "54c0367060cd310d0b3343fe72a589860a8b6e8173810164a4ffd6253f52e689"
+    },
+    {
+      "repo_id": "nvidia/GR00T-N1.7-3B",
+      "revision": "2fc962b973bccdd5d8ce4f67cc63b264d6886495",
+      "path": "processor_config.json",
+      "sha256": "85c1b4690ae090559e79a45193e598b65d6146eedf14750884da65e6d31032be"
+    },
+    {
+      "repo_id": "nvidia/GR00T-N1.7-3B",
+      "revision": "2fc962b973bccdd5d8ce4f67cc63b264d6886495",
+      "path": "embodiment_id.json",
+      "sha256": "abc4a749389837416a102d9455a8c089336f2e417afb18565703b9944974bc35"
+    }
+  ],
+  "official_pretrained_projector_indices": [
+    24,
+    25,
+    26,
+    27
+  ],
+  "missing_requested_reference_files": [
+    "workshop/CLAUDE.md",
+    "workshop/train.sh"
+  ],
+  "alternate_project_instructions": "workshop/AGENTS.md",
+  "saved_weights_loaded": false,
+  "notes": [
+    "Only data/processor settings and the transformers_version library field were selected from saved 200k files. No weight tensor was read.",
+    "Source labels and paths are provenance references; they are not runtime dependencies.",
+    "The tokenizer snapshot path serialized in final_processor_config.json is omitted from the portable processor settings."
+  ]
+}

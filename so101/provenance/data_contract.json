@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "source": "saved_200k/experiment_cfg/config.yaml + saved_200k/processor/processor_config.json + raw dataset meta/info.json",
+  "embodiment_tag": "new_embodiment",
+  "modalities": {
+    "video": {
+      "delta_indices": [
+        0
+      ],
+      "modality_keys": [
+        "room",
+        "wrist"
+      ],
+      "sin_cos_embedding_keys": null,
+      "mean_std_embedding_keys": null,
+      "action_configs": null
+    },
+    "state": {
+      "delta_indices": [
+        0
+      ],
+      "modality_keys": [
+        "single_arm",
+        "gripper"
+      ],
+      "sin_cos_embedding_keys": null,
+      "mean_std_embedding_keys": null,
+      "action_configs": null
+    },
+    "action": {
+      "delta_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "modality_keys": [
+        "single_arm",
+        "gripper"
+      ],
+      "sin_cos_embedding_keys": null,
+      "mean_std_embedding_keys": null,
+      "action_configs": [
+        {
+          "rep": "ABSOLUTE",
+          "type": "NON_EEF",
+          "format": "DEFAULT",
+          "state_key": null
+        },
+        {
+          "rep": "ABSOLUTE",
+          "type": "NON_EEF",
+          "format": "DEFAULT",
+          "state_key": null
+        }
+      ]
+    },
+    "language": {
+      "delta_indices": [
+        0
+      ],
+      "modality_keys": [
+        "annotation.human.task_description"
+      ],
+      "sin_cos_embedding_keys": null,
+      "mean_std_embedding_keys": null,
+      "action_configs": null
+    }
+  },
+  "joint_order": [
+    "shoulder_pan.pos",
+    "shoulder_lift.pos",
+    "elbow_flex.pos",
+    "wrist_flex.pos",
+    "wrist_roll.pos",
+    "gripper.pos"
+  ],
+  "state_dim": 6,
+  "action_dim": 6,
+  "units": {
+    "arm": "recorded LeRobot normalized joint positions, nominal range -100..100",
+    "gripper": "recorded LeRobot normalized gripper positions, nominal range 0..100",
+    "no_conversion_for_training": true
+  },
+  "units_source": "workshop/source/sim_to_real_so101/utils/pick_place_eval.py:dataset_state_to_radians; raw parquet values remain unchanged",
+  "video": {
+    "fps": 30,
+    "shape_hwc": [
+      480,
+      640,
+      3
+    ],
+    "codec": "av1",
+    "pixel_format": "yuv420p",
+    "has_audio": false
+  },
+  "raw_episode_count": 75,
+  "raw_frame_count": 16448
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "source": "saved_200k/experiment_cfg/config.yaml:data",
+  "settings": {
+    "download_cache": false,
+    "shard_size": 1024,
+    "episode_sampling_rate": 0.1,
+    "num_shards_per_epoch": 100000,
+    "ds_weights_alpha": null,
+    "override_pretraining_statistics": true,
+    "mode": "single_turn",
+    "random_chop": 0.0,
+    "mock_dataset_mode": false,
+    "shuffle": true,
+    "seed": 42,
+    "multiprocessing_context": "fork",
+    "allow_padding": false,
+    "subsample_ratio": 1.0,
+    "image_crop_size": [
+      244,
+      244
+    ],
+    "image_target_size": [
+      224,
+      224
+    ]
+  },
+  "loader_workers": 2,
+  "loader_workers_source": "workshop/docs/05-training.md; workers seen in saved train.log"
+}
