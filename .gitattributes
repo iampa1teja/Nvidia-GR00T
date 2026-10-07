@@ -1,0 +1,3 @@
+# This training repository uses ordinary Git files, including its datasets.
+# Upstream LFS rules are recorded in so101/provenance/upstream_gitattributes.txt.
+# Unused upstream media pointers are retained as text; training does not use them.

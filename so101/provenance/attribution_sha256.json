@@ -1,0 +1,8 @@
+{
+  "upstream_commit": "51d4c89f72fda44cbf77285c6a8114b52676b8a1",
+  "verified_against_pinned_upstream_raw_files": true,
+  "files": {
+    "LICENSE": "93363510f62ce25ad1a47605b0b06ab335edd82f1a444531c58dd30b6e5a5a0c",
+    "ATTRIBUTIONS.md": "07eb4f4f033fd1bcdbf55e29883276bdf11f58ab9103b4ebd5b68b3a2ca6f4d5"
+  }
+}

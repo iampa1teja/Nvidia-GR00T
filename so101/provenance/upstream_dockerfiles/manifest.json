@@ -1,0 +1,14 @@
+{
+  "docker/Dockerfile": {
+    "archive": "so101/provenance/upstream_dockerfiles/docker_dockerfile.txt",
+    "sha256": "6c2088e1128ce69e1bfe13f94c62222f117ae485e00aa860891d0feb3ec44b46"
+  },
+  "scripts/deployment/spark/Dockerfile": {
+    "archive": "so101/provenance/upstream_dockerfiles/scripts_deployment_spark_dockerfile.txt",
+    "sha256": "b5c8e620d9fc7f06fc6b4a166b22116874e30b9e048eb6e6447f7d4ae72f9bf9"
+  },
+  "scripts/deployment/jetson/Dockerfile": {
+    "archive": "so101/provenance/upstream_dockerfiles/scripts_deployment_jetson_dockerfile.txt",
+    "sha256": "3f48373000e8d55f77093335f95aba86e7eb3a99f017392fdfd4a3aab1937ed9"
+  }
+}
