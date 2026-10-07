@@ -1,0 +1,35 @@
+{
+  "action": {
+    "gripper": {
+      "end": 6,
+      "start": 5
+    },
+    "single_arm": {
+      "end": 5,
+      "start": 0
+    }
+  },
+  "annotation": {
+    "human.task_description": {
+      "original_key": "task_index"
+    }
+  },
+  "state": {
+    "gripper": {
+      "end": 6,
+      "start": 5
+    },
+    "single_arm": {
+      "end": 5,
+      "start": 0
+    }
+  },
+  "video": {
+    "room": {
+      "original_key": "observation.images.realsense_rgb"
+    },
+    "wrist": {
+      "original_key": "observation.images.wrist_cam"
+    }
+  }
+}

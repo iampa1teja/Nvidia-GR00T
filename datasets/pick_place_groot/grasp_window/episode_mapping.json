@@ -1,0 +1,110 @@
+[
+  {
+    "episode_index": 0,
+    "source_episode_index": 7,
+    "start_frame": 127,
+    "stop_frame_exclusive": 246
+  },
+  {
+    "episode_index": 1,
+    "source_episode_index": 10,
+    "start_frame": 0,
+    "stop_frame_exclusive": 247
+  },
+  {
+    "episode_index": 2,
+    "source_episode_index": 13,
+    "start_frame": 52,
+    "stop_frame_exclusive": 143
+  },
+  {
+    "episode_index": 3,
+    "source_episode_index": 14,
+    "start_frame": 52,
+    "stop_frame_exclusive": 143
+  },
+  {
+    "episode_index": 4,
+    "source_episode_index": 15,
+    "start_frame": 0,
+    "stop_frame_exclusive": 186
+  },
+  {
+    "episode_index": 5,
+    "source_episode_index": 16,
+    "start_frame": 38,
+    "stop_frame_exclusive": 129
+  },
+  {
+    "episode_index": 6,
+    "source_episode_index": 19,
+    "start_frame": 35,
+    "stop_frame_exclusive": 187
+  },
+  {
+    "episode_index": 7,
+    "source_episode_index": 22,
+    "start_frame": 52,
+    "stop_frame_exclusive": 171
+  },
+  {
+    "episode_index": 8,
+    "source_episode_index": 24,
+    "start_frame": 66,
+    "stop_frame_exclusive": 207
+  },
+  {
+    "episode_index": 9,
+    "source_episode_index": 26,
+    "start_frame": 40,
+    "stop_frame_exclusive": 138
+  },
+  {
+    "episode_index": 10,
+    "source_episode_index": 29,
+    "start_frame": 36,
+    "stop_frame_exclusive": 129
+  },
+  {
+    "episode_index": 11,
+    "source_episode_index": 44,
+    "start_frame": 16,
+    "stop_frame_exclusive": 103
+  },
+  {
+    "episode_index": 12,
+    "source_episode_index": 48,
+    "start_frame": 13,
+    "stop_frame_exclusive": 102
+  },
+  {
+    "episode_index": 13,
+    "source_episode_index": 53,
+    "start_frame": 45,
+    "stop_frame_exclusive": 135
+  },
+  {
+    "episode_index": 14,
+    "source_episode_index": 54,
+    "start_frame": 57,
+    "stop_frame_exclusive": 149
+  },
+  {
+    "episode_index": 15,
+    "source_episode_index": 55,
+    "start_frame": 49,
+    "stop_frame_exclusive": 137
+  },
+  {
+    "episode_index": 16,
+    "source_episode_index": 58,
+    "start_frame": 37,
+    "stop_frame_exclusive": 127
+  },
+  {
+    "episode_index": 17,
+    "source_episode_index": 70,
+    "start_frame": 40,
+    "stop_frame_exclusive": 131
+  }
+]
