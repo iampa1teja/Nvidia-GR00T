@@ -521,7 +521,7 @@ def test_non_oom_failure_never_retries_or_calls_stage_complete(monkeypatch, tmp_
 
 @pytest.mark.parametrize("processes", [(), (GPUProcess(2977, "unknown", "G", 18),)])
 def test_stale_utilization_settles_after_worker(monkeypatch, processes):
-    busy = GPUInfo(0, "GPU-test", "RTX 4090", 24564, 30, 90, processes)
+    busy = GPUInfo(0, "GPU-test", "RTX 4090", 24564, 12000, 90, processes)
     idle = GPUInfo(0, "GPU-test", "RTX 4090", 24564, 30, 0, processes)
     samples = iter([(busy,), (idle,)])
     monkeypatch.setattr(launcher, "detect_gpus", lambda: next(samples))

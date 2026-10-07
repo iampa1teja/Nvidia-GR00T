@@ -954,13 +954,7 @@ def _preflight_after_worker(expected_gpus):
         except GPUBusyError:
             # Workload owners fail immediately. A departed worker's telemetry
             # may settle with only the machine's tiny idle display context left.
-            if (
-                any(
-                    has_workload_processes(gpu) or (gpu.processes and gpu.used_memory_mib > 128)
-                    for gpu in detected
-                )
-                or time.monotonic() >= deadline
-            ):
+            if any(has_workload_processes(gpu) for gpu in detected) or time.monotonic() >= deadline:
                 raise
             time.sleep(0.25)
 
