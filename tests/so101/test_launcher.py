@@ -3,6 +3,7 @@
 import copy
 import json
 from pathlib import Path
+import subprocess
 from types import SimpleNamespace
 
 import pytest
@@ -58,6 +59,62 @@ class TinyGr00t(nn.Module):
         hidden = self.action_head.vl_self_attention(hidden)
         hidden = self.action_head.model(hidden)
         return self.action_head.action_decoder(hidden, categories)
+
+
+def test_upstream_integrity_ignores_generated_files_but_rejects_source_changes(
+    tmp_path, monkeypatch
+):
+    subprocess.run(["git", "init", "-q", str(tmp_path)], check=True)
+    source = tmp_path / "gr00t/model.py"
+    source.parent.mkdir()
+    source.write_text("original source\n")
+    (tmp_path / ".gitignore").write_text("outputs/\nuv.lock\n__pycache__/\nignored_model.py\n")
+    subprocess.run(["git", "add", ".gitignore", "gr00t"], cwd=tmp_path, check=True)
+    monkeypatch.setenv("GIT_TEST_ASSUME_DIFFERENT_OWNER", "1")
+    evidence = tmp_path / "provenance"
+    evidence.mkdir()
+    launcher.write_json(
+        evidence / "upstream_gr00t_sha256.json", {"gr00t/model.py": launcher.sha256(source)}
+    )
+    monkeypatch.setattr(launcher, "PROVENANCE", evidence)
+    ignored = tmp_path / "gr00t/outputs/local.png"
+    ignored.parent.mkdir()
+    ignored.write_bytes(b"local capture")
+    (tmp_path / "gr00t/uv.lock").write_text("local environment\n")
+    launcher.verify_upstream(tmp_path)
+    addition = tmp_path / "gr00t/new_model.py"
+    addition.write_text("unexpected source\n")
+    with pytest.raises(RuntimeError, match="new_model.py"):
+        launcher.verify_upstream(tmp_path)
+    addition.unlink()
+    addition = tmp_path / "gr00t/ignored_model.py"
+    addition.write_text("unexpected ignored source\n")
+    with pytest.raises(RuntimeError, match="ignored_model.py"):
+        launcher.verify_upstream(tmp_path)
+    addition.unlink()
+    source.write_text("changed source\n")
+    with pytest.raises(RuntimeError, match="model.py"):
+        launcher.verify_upstream(tmp_path)
+    source.unlink()
+    with pytest.raises(RuntimeError, match="model.py"):
+        launcher.verify_upstream(tmp_path)
+
+
+def test_git_output_trusts_only_the_resolved_repository(tmp_path, monkeypatch):
+    calls = []
+
+    def check_output(command, **kwargs):
+        calls.append((command, kwargs))
+        return "commit\n"
+
+    monkeypatch.setattr(launcher.subprocess, "check_output", check_output)
+    assert launcher._git_output(tmp_path / "subdir/..", "rev-parse", "HEAD") == "commit\n"
+    assert calls == [
+        (
+            ["git", "-c", f"safe.directory={tmp_path}", "-C", str(tmp_path), "rev-parse", "HEAD"],
+            {"text": True},
+        )
+    ]
 
 
 def test_loading_requires_all_loading_info_and_all_weights():

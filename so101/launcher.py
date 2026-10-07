@@ -76,13 +76,27 @@ def canonical_hash(payload):
     ).hexdigest()
 
 
+def _git_output(root, *arguments):
+    root = Path(root).resolve()
+    # Container root reads a host-owned bind mount. Trust only this repo for
+    # this command, without modifying global Git settings or trusting others.
+    return subprocess.check_output(
+        ["git", "-c", f"safe.directory={root}", "-C", str(root), *arguments], text=True
+    )
+
+
 def verify_upstream(root=ROOT):
+    root = Path(root)
     expected = read_json(PROVENANCE / "upstream_gr00t_sha256.json")
-    current = {
-        str(path.relative_to(root)): sha256(path)
-        for path in (root / "gr00t").rglob("*")
-        if path.is_file() and "__pycache__" not in path.parts and path.suffix != ".pyc"
-    }
+    names = _git_output(root, "ls-files", "-co", "--exclude-standard", "-z", "--", "gr00t").split(
+        "\0"
+    )
+    names.extend(
+        str(path.relative_to(root))
+        for path in (root / "gr00t").rglob("*.py")
+        if "__pycache__" not in path.parts
+    )
+    current = {name: sha256(root / name) for name in set(names) if name and (root / name).is_file()}
     if current != expected:
         changed = sorted(set(current) ^ set(expected))
         changed.extend(
@@ -1213,9 +1227,7 @@ def main(argv=None):
         output_root /= "dry_run" if mode == "dry_run" else f"smoke_{args.smoke_steps}"
     stages = (1, 2) if args.stage == "all" else (int(args.stage),)
     _disk_preflight(output_root, snapshots, stages, mode)
-    repo_commit = subprocess.check_output(
-        ["git", "-C", str(ROOT), "rev-parse", "HEAD"], text=True
-    ).strip()
+    repo_commit = _git_output(ROOT, "rev-parse", "HEAD").strip()
     print(f"Official pretrained tags: {', '.join(sorted(tags))}", flush=True)
     print(
         "Using NEW_EMBODIMENT with fresh SO-101 state/action adapters at projector index 10",

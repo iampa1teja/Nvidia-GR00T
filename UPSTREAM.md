@@ -2,7 +2,7 @@
 
 Source: https://github.com/NVIDIA/Isaac-GR00T.git
 
-Pinned commit: `51d4c89f72fda44cbf77285c6a8114b52676b8a1`. The source working tree had no local differences before restructuring. NVIDIA's `gr00t/` sources are retained unchanged; project adaptations belong in `so101/` and runtime patches.
+Pinned commit: `51d4c89f72fda44cbf77285c6a8114b52676b8a1`. The tracked source working tree had no local differences before restructuring. NVIDIA's `gr00t/` sources are retained unchanged; project adaptations belong in `so101/` and runtime patches.
 
 Official base: `nvidia/GR00T-N1.7-3B`, named by the pinned README, revision `2fc962b973bccdd5d8ce4f67cc63b264d6886495`.
 
@@ -12,7 +12,7 @@ The base's pretrained tags are `OXE_DROID_RELATIVE_EEF_RELATIVE_JOINT`, `XDOF`, 
 
 The old 200k checkpoint is evaluation-only. Only its data/modality/processor settings and library-version evidence may inform this project; its weights never initialize training.
 
-NVIDIA LICENSE and attribution files are retained. A modification notice is added in NOTICE. Source integrity hashes are recorded in `so101/provenance/upstream_gr00t_sha256.json`.
+NVIDIA LICENSE and attribution files are retained. A modification notice is added in NOTICE. Source integrity hashes are recorded in `so101/provenance/upstream_gr00t_sha256.json` and were verified against the official pinned Git tree. Four ignored local SO100 artifacts (three camera captures and an evaluation lockfile) are excluded from that upstream manifest; their hashes and origin classification are recorded separately in `so101/provenance/local_so100_artifacts.json`.
 
 The original upstream `.gitattributes` is retained in `so101/provenance/upstream_gitattributes.txt`. LFS filters are removed from this training repository so fresh clones require no Git LFS; unused upstream media pointers remain text and are outside the training path.
 

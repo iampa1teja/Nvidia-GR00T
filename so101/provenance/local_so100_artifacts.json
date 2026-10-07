@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/NVIDIA/Isaac-GR00T.git",
+  "upstream_revision": "51d4c89f72fda44cbf77285c6a8114b52676b8a1",
+  "upstream_tree_api": "https://api.github.com/repos/NVIDIA/Isaac-GR00T/git/trees/51d4c89f72fda44cbf77285c6a8114b52676b8a1?recursive=1",
+  "verification": "Complete, untruncated official GitHub Git tree excludes these paths. They were present locally before restructuring and are not upstream source files. Their bytes are preserved locally; their hashes do not belong in the upstream source integrity manifest.",
+  "artifacts": [
+    {
+      "path": "gr00t/eval/real_robot/SO100/outputs/captured_images/opencv__dev_video2.png",
+      "size_bytes": 323012,
+      "sha256": "15ba2a358e9e83332f00cffd877dfd0bdd0751e01043b270f600f3172d561f65",
+      "classification": "local camera capture",
+      "upstream_tracked": false
+    },
+    {
+      "path": "gr00t/eval/real_robot/SO100/outputs/captured_images/opencv__dev_video4.png",
+      "size_bytes": 427330,
+      "sha256": "c90dac41b91f61d6b7c0a99379aaa91e604624ac7c363a27469ddacc43534603",
+      "classification": "local camera capture",
+      "upstream_tracked": false
+    },
+    {
+      "path": "gr00t/eval/real_robot/SO100/outputs/captured_images/opencv__dev_video7.png",
+      "size_bytes": 409610,
+      "sha256": "63c568ca6eb06a01b63f80246ccaa14056e004b1067ddd616ad6f22da08e51a6",
+      "classification": "local camera capture",
+      "upstream_tracked": false
+    },
+    {
+      "path": "gr00t/eval/real_robot/SO100/uv.lock",
+      "size_bytes": 1006480,
+      "sha256": "a6690dbf2c18db3a77e792abd44d5224db33ee1752fc51e0746f2127f40c90a3",
+      "classification": "local SO100 evaluation environment lockfile",
+      "upstream_tracked": false
+    }
+  ]
+}
