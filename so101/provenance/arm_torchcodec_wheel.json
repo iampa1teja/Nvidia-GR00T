@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "upstream_repository": "https://github.com/NVIDIA/Isaac-GR00T.git",
+  "upstream_revision": "51d4c89f72fda44cbf77285c6a8114b52676b8a1",
+  "artifact_path": "scripts/deployment/dgpu/wheels/torchcodec-0.8.0-cp312-cp312-linux_aarch64.whl",
+  "official_payload_url": "https://media.githubusercontent.com/media/NVIDIA/Isaac-GR00T/51d4c89f72fda44cbf77285c6a8114b52676b8a1/scripts/deployment/dgpu/wheels/torchcodec-0.8.0-cp312-cp312-linux_aarch64.whl",
+  "sha256": "3c5bf377f922d2126041b3c49846504083a015d44979ca594e368ccc8c4c0814",
+  "size_bytes": 512641,
+  "upstream_git_blob_sha1": "2033155f7041878cd92cf57144866368e935595f",
+  "upstream_pointer_sha256": "314a2d0378d6095daf799b8985a9a029c3193754f154182619ec678089cca44b",
+  "upstream_pointer_size_bytes": 131,
+  "purpose": "The upstream universal uv.lock resolves both x86_64 and aarch64. uv lock --locked requires the local aarch64 TorchCodec wheel metadata even when run on x86_64. The official Git LFS payload is preserved as an ordinary Git binary so lock validation requires no Git LFS. Its dependency version and existing lockfile hash are unchanged."
+}

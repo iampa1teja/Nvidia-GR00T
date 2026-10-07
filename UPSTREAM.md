@@ -17,3 +17,5 @@ NVIDIA LICENSE and attribution files are retained. A modification notice is adde
 The original upstream `.gitattributes` is retained in `so101/provenance/upstream_gitattributes.txt`. LFS filters are removed from this training repository so fresh clones require no Git LFS; unused upstream media pointers remain text and are outside the training path.
 
 The three original deployment Dockerfiles are preserved byte-for-byte as text under `so101/provenance/upstream_dockerfiles/`, with their source paths and checksums in its manifest. The repository has one executable Dockerfile at its root for the SO-101 training workflow. Other upstream deployment documentation is retained for reference.
+
+The official aarch64 TorchCodec 0.8.0 wheel is hydrated from its pinned upstream LFS payload and shipped as an ordinary Git binary. Its SHA-256 and download provenance are recorded in `so101/provenance/arm_torchcodec_wheel.json`. This wheel is needed to validate the upstream universal `uv.lock` (which resolves x86_64 and aarch64) without Git LFS; its existing version and lockfile hash are unchanged.

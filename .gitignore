@@ -185,6 +185,10 @@ pytorch_model*.bin
 
 # The pinned dependency lock is part of the self-contained setup.
 !/uv.lock
+# Preserve only the official ARM wheel needed by universal lock validation.
+!/scripts/deployment/dgpu/wheels/
+/scripts/deployment/dgpu/wheels/*
+!/scripts/deployment/dgpu/wheels/torchcodec-0.8.0-cp312-cp312-linux_aarch64.whl
 # Also protect checkpoints when a caller chooses a custom in-repo output root.
 stage_1_align/
 stage_2_main/
